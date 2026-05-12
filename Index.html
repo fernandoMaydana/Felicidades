@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Ivonne ✨</title>
+    
+    <!-- Fuentes: Fredoka (Títulos), Caveat (Handwriting) y Nunito (Botones) -->
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Fredoka:wght@400;600&family=Nunito:wght@600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --text-accent: #ff6b6b;
+            --btn-bg: #ff9a9e;
+            --btn-hover: #ff6b6b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 1.5rem;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Contenedor principal de los pasos */
+        .step {
+            display: none;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+        }
+        .step.active {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.8) translateY(50px) rotate(10deg); }
+            100% { opacity: 1; transform: scale(1) translateY(0) rotate(0deg); }
+        }
+        
+        @keyframes popOut {
+            0% { opacity: 1; transform: scale(1) translateY(0) rotate(0deg); }
+            100% { opacity: 0; transform: scale(0.8) translateY(-50px) rotate(-10deg); }
+        }
+
+        /* =========================================
+           NUEVO ESTILO: POLAROID / SCRAPBOOK
+           ========================================= */
+        .card {
+            background: #ffffff;
+            padding: 1.5rem 1.5rem 2.5rem 1.5rem;
+            border-radius: 8px; /* Borde sutil */
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 5px 15px rgba(0,0,0,0.05);
+            position: relative;
+            transform-origin: center;
+        }
+
+        /* Cinta Adhesiva (Washi Tape) */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-3deg);
+            width: 120px;
+            height: 35px;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.8);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            z-index: 10;
+            border-radius: 2px;
+        }
+
+        /* Inclinaciones para dar aspecto de álbum de fotos */
+        #step0 .card { transform: rotate(-2deg); }
+        #step1 .card { transform: rotate(2deg); }
+        #step2 .card { transform: rotate(-1deg); }
+        #step3 .card { transform: rotate(3deg); }
+        #step4 .card { transform: rotate(-3deg); }
+        #step5 .card { transform: rotate(1deg); }
+        #step6 .card { transform: rotate(0deg); border-radius: 20px; padding: 3rem 2rem;} /* La carta final es diferente */
+
+        /* Caja de la "Foto" en la polaroid */
+        .anim-container {
+            height: 220px;
+            background: linear-gradient(to bottom right, #f8f9fa, #e9ecef);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.03);
+            overflow: hidden;
+        }
+
+        h1 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.8rem;
+            color: var(--text-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Texto escrito a mano */
+        p { 
+            font-family: 'Caveat', cursive; 
+            font-size: 1.8rem; 
+            line-height: 1.2; 
+            font-weight: 700; 
+            color: #2d3436; 
+            margin-bottom: 0.5rem; 
+        }
+        
+        .highlight { 
+            color: #d63031; 
+            background: rgba(255, 107, 107, 0.15); 
+            padding: 0 8px; 
+            border-radius: 5px;
+        }
+
+        /* Botón fuera de la tarjeta para que la tarjeta parezca solo una foto */
+        .btn {
+            background: var(--btn-bg);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-family: 'Fredoka', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+            margin-top: 1rem;
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            background: var(--btn-hover);
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        /* =========================================
+           ANIMACIONES ESPECÍFICAS
+           ========================================= */
+        .wave-emoji { font-size: 4.5rem; transform-origin: 70% 70%; animation: wave 2.5s infinite; display: inline-block; }
+        @keyframes wave { 0% { transform: rotate(0deg); } 10% { transform: rotate(14deg); } 20% { transform: rotate(-8deg); } 30% { transform: rotate(14deg); } 40% { transform: rotate(-4deg); } 50% { transform: rotate(10deg); } 60% { transform: rotate(0deg); } 100% { transform: rotate(0deg); } }
+
+        .cake-emoji { font-size: 5rem; animation: bounceCake 2s infinite; display: inline-block; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1)); }
+        @keyframes bounceCake { 0%, 100% { transform: scale(1) translateY(0); } 50% { transform: scale(1.1) translateY(-15px) rotate(5deg); } }
+
+        .archery { font-size: 3rem; display: inline-block; animation: shoot 2.5s infinite; position: absolute; left: -20px; z-index: 2;}
+        .water { font-size: 4rem; display: inline-block; animation: float 3s ease-in-out infinite; margin-left: 40px;}
+        @keyframes shoot { 0% { transform: translateX(0); opacity: 1; } 40% { transform: translateX(60px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
+        .plant { font-size: 5rem; transform-origin: bottom center; animation: growPlant 3s ease-in-out infinite alternate; display: inline-block; }
+        @keyframes growPlant { 0% { transform: scale(0.8) rotate(-5deg); } 100% { transform: scale(1.1) rotate(5deg); } }
+
+        .rocket { font-size: 5rem; display: inline-block; animation: rocketHover 2s infinite; filter: drop-shadow(0 15px 15px rgba(0,0,0,0.1));}
+        @keyframes rocketHover { 0%, 100% { transform: translateY(0) rotate(45deg); } 50% { transform: translateY(-15px) rotate(45deg); } }
+
+        .letter-icon { font-size: 4.5rem; animation: float 3s infinite; }
+
+        /* Estilos Carta Final */
+        #step6 .card::before { display: none; } /* Quitamos la cinta de la carta final */
+        .typewriter-text { font-family: 'Caveat', cursive; text-align: left; font-size: 1.8rem; line-height: 1.3; color: #2d3436; font-weight: 700; }
+        .cursor { display: inline-block; width: 3px; height: 1.5rem; background: var(--text-accent); margin-left: 2px; animation: blink 0.8s infinite; vertical-align: middle; }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        audio { display: none; }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" src="beck.mp3" loop></audio>
+
+    <!-- PASO 0: INTRO -->
+    <div class="step active" id="step0">
+        <div class="card">
+            <div class="anim-container">
+                <div class="wave-emoji">👋</div>
+            </div>
+            <h1>Hola Ivonne</h1>
+            <p>Espero que estés muy bien. Ese día de la graduación fue un caos JAJAJ y no pude felicitarte como debía.</p>
+            <p>Preparé esto con cariño. Sube el volumen...</p>
+        </div>
+        <button class="btn" onclick="nextStep(1)">¡Vamos! ✨</button>
+    </div>
+
+    <!-- PASO 1: CUMPLEAÑOS -->
+    <div class="step" id="step1">
+        <div class="card">
+            <div class="anim-container">
+                <div class="cake-emoji">🎂</div>
+            </div>
+            <h1>24 de Enero</h1>
+            <p>Tu cumpleaños. Un día en el que el mundo ganó a alguien muy especial.</p>
+            <p>Te envío un poco de magia atrasada.</p>
+        </div>
+        <button class="btn" onclick="nextStep(2)">Siguiente 🎈</button>
+    </div>
+
+    <!-- PASO 2: NOMBRE Y SIGNO -->
+    <div class="step" id="step2">
+        <div class="card">
+            <div class="anim-container" style="position: relative;">
+                <div class="archery">🏹</div>
+                <div class="water">♒</div>
+            </div>
+            <h1>Acuario & Arquera</h1>
+            <p>¿Sabías que <span class="highlight">Ivonne</span> significa "La Arquera"?</p>
+            <p>Independiente, original y siempre apuntas alto.</p>
+        </div>
+        <button class="btn" onclick="nextStep(3)">Tu Camino 🌟</button>
+    </div>
+
+    <!-- PASO 3: PARVULARIO -->
+    <div class="step" id="step3">
+        <div class="card">
+            <div class="anim-container">
+                <div class="plant">🌱</div>
+            </div>
+            <h1>Educadora</h1>
+            <p>Estudias <span class="highlight">Parvulario</span>. Tienes en tus manos sembrar las primeras semillitas en los niños.</p>
+            <p>Una labor hermosísima.</p>
+        </div>
+        <button class="btn" onclick="nextStep(4)">El futuro 🚀</button>
+    </div>
+
+    <!-- PASO 4: CONSEJOS 20 AÑOS -->
+    <div class="step" id="step4">
+        <div class="card">
+            <div class="anim-container">
+                <div class="rocket">🚀</div>
+            </div>
+            <h1>Tus 20's</h1>
+            <p>Viaja, lee, equivócate mucho y cuida tu salud mental.</p>
+            <p>Ríete fuerte y descubre qué te hace realmente feliz.</p>
+        </div>
+        <button class="btn" onclick="nextStep(5)">Casi terminamos 💌</button>
+    </div>
+
+    <!-- PASO 5: CIERRE -->
+    <div class="step" id="step5">
+        <div class="card">
+            <div class="anim-container">
+                <div class="letter-icon">✉️</div>
+            </div>
+            <h1>Para ti...</h1>
+            <p>Espero que te vaya increíble. Sé que es tarde para decir todo esto, pero... mejor tarde que nunca.</p>
+            <p>Te dejo esta reflexión.</p>
+        </div>
+        <button class="btn" onclick="startPoem()">Abrir Carta 📜</button>
+    </div>
+
+    <!-- PASO 6: POEMA -->
+    <div class="step" id="step6">
+        <div class="card">
+            <div id="typewriter" class="typewriter-text"></div>
+            <span id="cursor" class="cursor"></span>
+        </div>
+        <button id="finalBtn" class="btn" style="display:none;" onclick="fireHearts()">Un abrazo ❤️</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <script>
+        let currentStep = 0;
+
+        function nextStep(step) {
+            const current = document.getElementById(`step${currentStep}`);
+            const next = document.getElementById(`step${step}`);
+            
+            if (currentStep === 0) {
+                const music = document.getElementById('bgMusic');
+                music.volume = 0.5;
+                music.play().catch(() => console.log("Audio block"));
+            }
+
+            // Animación de salida (Pop Out)
+            current.style.animation = 'popOut 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards';
+            
+            setTimeout(() => {
+                current.classList.remove('active');
+                current.style.animation = ''; // Resetear animación
+                next.classList.add('active');
+                currentStep = step;
+                
+                if (step === 1) fireConfetti(); // Confeti solo en el cumpleaños
+            }, 400);
+        }
+
+        const poem = `“Nunca es demasiado tarde, o en mi caso demasiado pronto, para ser quien quieras ser. No hay límite en el tiempo, empieza cuando quieras, puedes cambiar o no hacerlo, no hay normas al respecto.\n\nDe todo podemos sacar una lectura positiva o negativa, espero que tú saques la positiva. Espero que veas cosas que te sorprendan; espero que sientas cosas que nunca hayas sentido; espero que conozcas a personas con otro punto de vista; espero que vivas una vida de la que te sientas orgullosa; y si ves que no es así, espero que tengas la fortaleza para empezar de nuevo.”`;
+
+        function startPoem() {
+            nextStep(6);
+            let i = 0;
+            const target = document.getElementById('typewriter');
+            const btn = document.getElementById('finalBtn');
+            const cursor = document.getElementById('cursor');
+
+            target.innerHTML = ''; 
+
+            function type() {
+                if (i < poem.length) {
+                    if (poem.charAt(i) === '\n') {
+                        target.innerHTML += '<br>';
+                    } else {
+                        target.innerHTML += poem.charAt(i);
+                    }
+                    i++;
+                    let speed = poem.charAt(i - 1) === '.' || poem.charAt(i - 1) === ';' ? 400 : 35;
+                    setTimeout(type, speed);
+                } else {
+                    cursor.style.display = 'none';
+                    btn.style.display = 'block';
+                    setTimeout(() => btn.style.opacity = '1', 100);
+                    fireHearts();
+                }
+            }
+            setTimeout(type, 1000);
+        }
+
+        // Efectos de confeti
+        function fireConfetti() {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff9a9e', '#fecfef', '#a1c4fd']
+            });
+        }
+
+        function fireHearts() {
+            confetti({
+                spread: 360,
+                ticks: 100,
+                gravity: 0.5,
+                decay: 0.94,
+                startVelocity: 30,
+                shapes: ['heart'],
+                colors: ['#ff6b6b', '#ff9a9e'],
+                particleCount: 80,
+                scalar: 2
+            });
+        }
+    </script>
+</body>
+</html>
