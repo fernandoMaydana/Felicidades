@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Meta Tags para WhatsApp -->
+    <meta property="og:title" content="Para Ivonne 🎓">
+    <meta property="og:description" content="Una pequeña recapitulación especial para ti.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1513151233558-d860c5398176?q=80&w=1000&auto=format&fit=crop">
+    
+    <title>Ivonne | Recap ✨</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #050505;
+            --primary: #8b5cf6; /* Violeta Eléctrico */
+            --secondary: #06b6d4; /* Cyan */
+            --accent: #ffffff;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --font-main: 'Outfit', sans-serif;
+            --transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-main); }
+
+        body {
+            background-color: var(--bg);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden; /* Evita scroll durante la experiencia */
+            padding: 1.5rem;
+        }
+
+        /* Fondo de Aurora Animada */
+        .aurora-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            filter: blur(100px);
+            opacity: 0.4;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .blob {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: move 25s infinite alternate;
+            opacity: 0.6;
+        }
+
+        .blob.two {
+            background: var(--secondary);
+            animation: move 18s infinite alternate-reverse;
+            left: 50%;
+            opacity: 0.4;
+        }
+
+        @keyframes move {
+            from { transform: translate(-30%, -30%) rotate(0deg); }
+            to { transform: translate(30%, 30%) rotate(360deg); }
+        }
+
+        /* Sistema de Pasos */
+        .step {
+            display: none;
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+        }
+
+        .step.active {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(60px) scale(0.9); filter: blur(10px); }
+            to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+        }
+
+        /* Tarjeta Glassmorphism Moderna */
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            border-radius: 40px;
+            padding: 3.5rem 2.5rem;
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            transition: 0.8s;
+        }
+
+        .card:hover::before { left: 100%; }
+
+        /* Tipografía Neón */
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+
+        p { font-size: 1.15rem; line-height: 1.7; color: #d4d4d8; font-weight: 300; }
+        .highlight { color: var(--secondary); font-weight: 600; text-shadow: 0 0 15px rgba(6, 182, 212, 0.3); }
+
+        /* Botón Estilo Glass-Primary */
+        .btn {
+            background: white;
+            color: black;
+            border: none;
+            padding: 1.2rem 2.5rem;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.2);
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.4);
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Iconos de Sección */
+        .icon-box {
+            width: 90px;
+            height: 90px;
+            background: rgba(139, 92, 246, 0.08);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.8rem;
+            margin: 0 auto 1.5rem auto;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            box-shadow: inset 0 0 20px rgba(139, 92, 246, 0.1);
+        }
+
+        /* Maquina de escribir mejorada */
+        .typewriter-text { text-align: left; color: #fff; font-size: 1.15rem; line-height: 1.9; font-weight: 300; }
+        .cursor { display: inline-block; width: 3px; height: 1.2rem; background: var(--secondary); margin-left: 5px; animation: blink 0.8s infinite; vertical-align: middle; }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        audio { display: none; }
+    </style>
+</head>
+<body>
+
+    <!-- Fondo de Aurora -->
+    <div class="aurora-bg">
+        <div class="blob"></div>
+        <div class="blob two"></div>
+    </div>
+    
+    <audio id="bgMusic" src="beck.mp3" loop></audio>
+
+    <!-- PASO 0: INTRO -->
+    <div class="step active" id="step0">
+        <div class="card">
+            <h1>Hola Ivonne</h1>
+            <p>Espero que estés bien. Sé que el día de la graduación fue un caos JAJAJ, pero quería dejarte algo por aquí.</p>
+            <p style="margin-top: 1.5rem;">Ya no hablamos tanto y no soy fan de los chats, pero esto es una pequeña recapitulación especial...</p>
+            <button class="btn" onclick="nextStep(1)">Empezar ✨</button>
+        </div>
+    </div>
+
+    <!-- PASO 1: CUMPLEAÑOS -->
+    <div class="step" id="step1">
+        <div class="card">
+            <div class="icon-box">🎂</div>
+            <h1>24 de Enero</h1>
+            <p>2006. El día que naciste y el mundo ganó a una <span class="highlight">Acuario</span> excepcional.</p>
+            <p style="margin-top: 1rem;">Nunca es tarde para celebrar tu camino.</p>
+            <button class="btn" onclick="nextStep(2)">Continuar</button>
+        </div>
+    </div>
+
+    <!-- PASO 2: NOMBRE Y SIGNO -->
+    <div class="step" id="step2">
+        <div class="card">
+            <div class="icon-box">♒</div>
+            <h1>Acuario</h1>
+            <p><span class="highlight">Ivonne</span> significa "La Arquera".</p>
+            <p style="margin-top: 1rem;">Como buena Acuario, eres independiente, innovadora y siempre tienes una visión original del mundo.</p>
+            <button class="btn" onclick="nextStep(3)">Tu Carrera</button>
+        </div>
+    </div>
+
+    <!-- PASO 3: PARVULARIO -->
+    <div class="step" id="step3">
+        <div class="card">
+            <div class="icon-box">📚</div>
+            <h1>Educadora</h1>
+            <p>Sé que estás en <span class="highlight">Parvulario</span>. No solo enseñas, estás construyendo el futuro de quienes más lo necesitan.</p>
+            <p style="margin-top: 1rem; font-style: italic; font-size: 1rem;">"Es la base de todo lo que vendrá después."</p>
+            <button class="btn" onclick="nextStep(4)">Los 20</button>
+        </div>
+    </div>
+
+    <!-- PASO 4: CONSEJOS 20 AÑOS -->
+    <div class="step" id="step4">
+        <div class="card">
+            <div class="icon-box">🚀</div>
+            <h1>Tus 20's</h1>
+            <p>Es tu década de <span class="highlight">exploración</span>. Aprende de finanzas, viaja si puedes y no te apresures por cumplir metas de otros.</p>
+            <p style="margin-top: 1rem;">El tiempo es tu mayor activo ahora mismo.</p>
+            <button class="btn" onclick="nextStep(5)">Reflexión</button>
+        </div>
+    </div>
+
+    <!-- PASO 5: CIERRE -->
+    <div class="step" id="step5">
+        <div class="card">
+            <h1>Para terminar...</h1>
+            <p>Espero que te vaya increíble en todo. Sé que es tarde para decir esto, pero mejor tarde que nunca jajaja.</p>
+            <p style="margin-top: 1.5rem;">Te dejo una reflexión que creo que te puede gustar mucho. Te cuidas.</p>
+            <button class="btn" onclick="startPoem()">Leer Carta 📜</button>
+        </div>
+    </div>
+
+    <!-- PASO 6: POEMA -->
+    <div class="step" id="step6">
+        <div class="card">
+            <div id="typewriter" class="typewriter-text"></div>
+            <span id="cursor" class="cursor"></span>
+            <button id="finalBtn" class="btn" style="display:none; margin: 2.5rem auto 0 auto; width: 100%;" onclick="fireHearts()">Hecho ❤️</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <script>
+        let currentStep = 0;
+
+        function nextStep(step) {
+            const current = document.getElementById(`step${currentStep}`);
+            const next = document.getElementById(`step${step}`);
+            
+            if (currentStep === 0) {
+                const music = document.getElementById('bgMusic');
+                music.volume = 0.4;
+                music.play().catch(e => console.log("Audio requires interaction"));
+            }
+
+            current.style.opacity = '0';
+            current.style.transform = 'translateY(-30px)';
+            
+            setTimeout(() => {
+                current.classList.remove('active');
+                next.classList.add('active');
+                currentStep = step;
+                if (step === 1) fireConfetti();
+            }, 500);
+        }
+
+        const poem = `“Nunca es demasiado tarde, o en mi caso demasiado pronto, para ser quien quieras ser. No hay límite en el tiempo, empieza cuando quieras, puedes cambiar o no hacerlo no hay normas al respecto.
+
+De todo podemos sacar una lectura positiva o negativa, espero que tú saques la positiva. Espero que veas cosas que te sorprendan; espero que sientas cosas que nunca hayas sentido; espero que conozcas a personas con otro punto de vista; espero que vivas una vida de la que te sientas orgullosa; y si ves que no es así, espero que tengas la fortaleza para empezar de nuevo.”`;
+
+        function startPoem() {
+            nextStep(6);
+            let i = 0;
+            const target = document.getElementById('typewriter');
+            const btn = document.getElementById('finalBtn');
+            const cursor = document.getElementById('cursor');
+
+            function type() {
+                if (i < poem.length) {
+                    target.innerHTML += poem.charAt(i);
+                    i++;
+                    let speed = poem.charAt(i - 1) === '.' || poem.charAt(i - 1) === ';' ? 500 : 35;
+                    setTimeout(type, speed);
+                } else {
+                    cursor.style.display = 'none';
+                    btn.style.display = 'block';
+                    setTimeout(() => btn.style.opacity = '1', 100);
+                    fireHearts();
+                }
+            }
+            setTimeout(type, 1000);
+        }
+
+        function fireConfetti() {
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#8b5cf6', '#06b6d4', '#ffffff'] });
+        }
+
+        function fireHearts() {
+            confetti({
+                spread: 360, ticks: 100, gravity: 0.5, decay: 0.94, startVelocity: 30,
+                shapes: ['heart'], colors: ['#8b5cf6', '#ff4d4d', '#ffffff'],
+                particleCount: 60, scalar: 2
+            });
+        }
+    </script>
+</body>
+</html>
