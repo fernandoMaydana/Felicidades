@@ -2,193 +2,169 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para Ivonne ✨</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Galaxia para Ivonne ✨</title>
     
-    <!-- Fuentes: Fredoka (Títulos), Caveat (Handwriting) y Nunito (Botones) -->
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Fredoka:wght@400;600&family=Nunito:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --text-accent: #ff6b6b;
-            --btn-bg: #ff9a9e;
-            --btn-hover: #ff6b6b;
+            --bg-color: #030a16; /* Azul medianoche muy oscuro */
+            --text-main: #e2e8f0;
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.6);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+
         body {
-            font-family: 'Nunito', sans-serif;
-            background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            min-height: 100vh;
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
-            padding: 1.5rem;
+            position: relative;
+            /* Perspectiva para el efecto 3D de viajar a través de las escenas */
+            perspective: 800px; 
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* Estrellas del fondo (2 capas para parallax) */
+        .stars-bg {
+            position: absolute;
+            top: 0; left: 0; width: 200%; height: 200%;
+            background: transparent url('data:image/svg+xml;utf8,<svg width="250" height="250" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="1.5" fill="%23ffffff" opacity="0.8"/><circle cx="100" cy="80" r="1" fill="%23ffffff" opacity="0.5"/><circle cx="200" cy="150" r="2" fill="%23ffffff" opacity="0.3"/><circle cx="50" cy="200" r="1" fill="%23ffffff" opacity="0.6"/></svg>') repeat;
+            z-index: 1;
+            animation: moveStars 150s linear infinite;
+        }
+        .stars-bg2 {
+            position: absolute;
+            top: 0; left: 0; width: 200%; height: 200%;
+            background: transparent url('data:image/svg+xml;utf8,<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="%2338bdf8" opacity="0.4"/><circle cx="250" cy="120" r="1.5" fill="%23a855f7" opacity="0.4"/></svg>') repeat;
+            z-index: 1;
+            animation: moveStars 100s linear infinite reverse;
         }
 
-        /* Contenedor principal de los pasos */
-        .step {
-            display: none;
-            width: 100%;
-            max-width: 420px;
+        @keyframes moveStars {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-20%, -20%); }
+        }
+
+        /* Contenedor de las constelaciones (pasos) */
+        .scene {
+            position: absolute;
+            z-index: 10;
+            width: 90%;
+            max-width: 600px;
             text-align: center;
-        }
-        .step.active {
+            opacity: 0;
+            /* Posición inicial profunda en la pantalla */
+            transform: translateZ(-300px) scale(0.6);
+            transition: all 1.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            pointer-events: none;
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
-            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-
-        @keyframes popIn {
-            0% { opacity: 0; transform: scale(0.8) translateY(50px) rotate(10deg); }
-            100% { opacity: 1; transform: scale(1) translateY(0) rotate(0deg); }
-        }
-        
-        @keyframes popOut {
-            0% { opacity: 1; transform: scale(1) translateY(0) rotate(0deg); }
-            100% { opacity: 0; transform: scale(0.8) translateY(-50px) rotate(-10deg); }
-        }
-
-        /* =========================================
-           NUEVO ESTILO: POLAROID / SCRAPBOOK
-           ========================================= */
-        .card {
-            background: #ffffff;
-            padding: 1.5rem 1.5rem 2.5rem 1.5rem;
-            border-radius: 8px; /* Borde sutil */
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 5px 15px rgba(0,0,0,0.05);
-            position: relative;
-            transform-origin: center;
-        }
-
-        /* Cinta Adhesiva (Washi Tape) */
-        .card::before {
-            content: '';
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%) rotate(-3deg);
-            width: 120px;
-            height: 35px;
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255,255,255,0.8);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            z-index: 10;
-            border-radius: 2px;
-        }
-
-        /* Inclinaciones para dar aspecto de álbum de fotos */
-        #step0 .card { transform: rotate(-2deg); }
-        #step1 .card { transform: rotate(2deg); }
-        #step2 .card { transform: rotate(-1deg); }
-        #step3 .card { transform: rotate(3deg); }
-        #step4 .card { transform: rotate(-3deg); }
-        #step5 .card { transform: rotate(1deg); }
-        #step6 .card { transform: rotate(0deg); border-radius: 20px; padding: 3rem 2rem;} /* La carta final es diferente */
-
-        /* Caja de la "Foto" en la polaroid */
-        .anim-container {
-            height: 220px;
-            background: linear-gradient(to bottom right, #f8f9fa, #e9ecef);
-            border-radius: 6px;
-            display: flex;
             align-items: center;
-            justify-content: center;
-            margin-bottom: 1.5rem;
-            border: 1px solid rgba(0,0,0,0.05);
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.03);
-            overflow: hidden;
+        }
+
+        .scene.active {
+            opacity: 1;
+            transform: translateZ(0) scale(1);
+            pointer-events: auto;
+        }
+
+        .scene.passed {
+            opacity: 0;
+            /* Se mueve hacia el usuario hasta desaparecer detrás de la cámara */
+            transform: translateZ(300px) scale(1.5);
+            pointer-events: none;
+        }
+
+        /* Símbolo central (Estrella/Emoji brillante) */
+        .celestial-body {
+            font-size: 5rem;
+            margin-bottom: 2rem;
+            animation: pulseGlow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { filter: drop-shadow(0 0 10px var(--accent-glow)) drop-shadow(0 0 20px var(--accent-glow)); transform: scale(1); }
+            100% { filter: drop-shadow(0 0 25px var(--accent-glow)) drop-shadow(0 0 50px var(--accent-glow)); transform: scale(1.05); }
         }
 
         h1 {
-            font-family: 'Fredoka', sans-serif;
-            font-size: 1.8rem;
-            color: var(--text-accent);
-            margin-bottom: 0.5rem;
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #ffffff;
+            text-shadow: 0 0 15px rgba(255,255,255,0.5);
         }
 
-        /* Texto escrito a mano */
-        p { 
-            font-family: 'Caveat', cursive; 
-            font-size: 1.8rem; 
-            line-height: 1.2; 
-            font-weight: 700; 
-            color: #2d3436; 
-            margin-bottom: 0.5rem; 
-        }
-        
-        .highlight { 
-            color: #d63031; 
-            background: rgba(255, 107, 107, 0.15); 
-            padding: 0 8px; 
-            border-radius: 5px;
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            font-weight: 300;
+            color: #cbd5e1;
         }
 
-        /* Botón fuera de la tarjeta para que la tarjeta parezca solo una foto */
-        .btn {
-            background: var(--btn-bg);
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
+        .highlight {
+            color: var(--accent);
+            font-weight: 600;
+            text-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        /* Botón espacial */
+        .btn-space {
+            background: rgba(255,255,255,0.05);
+            color: #ffffff;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 1rem 2.5rem;
             border-radius: 30px;
             font-size: 1.1rem;
-            font-family: 'Fredoka', sans-serif;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 400;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
-            margin-top: 1rem;
-            width: 80%;
-            margin-left: auto;
-            margin-right: auto;
-            display: block;
+            margin-top: 2rem;
+            backdrop-filter: blur(5px);
         }
 
-        .btn:hover {
-            transform: translateY(-5px) scale(1.05);
-            background: var(--btn-hover);
-            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.4);
+        .btn-space:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: #ffffff;
+            box-shadow: 0 0 20px rgba(255,255,255,0.4);
+            transform: translateY(-3px);
         }
 
-        /* =========================================
-           ANIMACIONES ESPECÍFICAS
-           ========================================= */
-        .wave-emoji { font-size: 4.5rem; transform-origin: 70% 70%; animation: wave 2.5s infinite; display: inline-block; }
-        @keyframes wave { 0% { transform: rotate(0deg); } 10% { transform: rotate(14deg); } 20% { transform: rotate(-8deg); } 30% { transform: rotate(14deg); } 40% { transform: rotate(-4deg); } 50% { transform: rotate(10deg); } 60% { transform: rotate(0deg); } 100% { transform: rotate(0deg); } }
+        /* Estilos Poema Final (desvanecimiento) */
+        .poem-text {
+            font-family: 'Caveat', cursive;
+            font-size: 2rem;
+            line-height: 1.4;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+            min-height: 180px;
+            transition: opacity 1s ease;
+        }
 
-        .cake-emoji { font-size: 5rem; animation: bounceCake 2s infinite; display: inline-block; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1)); }
-        @keyframes bounceCake { 0%, 100% { transform: scale(1) translateY(0); } 50% { transform: scale(1.1) translateY(-15px) rotate(5deg); } }
-
-        .archery { font-size: 3rem; display: inline-block; animation: shoot 2.5s infinite; position: absolute; left: -20px; z-index: 2;}
-        .water { font-size: 4rem; display: inline-block; animation: float 3s ease-in-out infinite; margin-left: 40px;}
-        @keyframes shoot { 0% { transform: translateX(0); opacity: 1; } 40% { transform: translateX(60px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-
-        .plant { font-size: 5rem; transform-origin: bottom center; animation: growPlant 3s ease-in-out infinite alternate; display: inline-block; }
-        @keyframes growPlant { 0% { transform: scale(0.8) rotate(-5deg); } 100% { transform: scale(1.1) rotate(5deg); } }
-
-        .rocket { font-size: 5rem; display: inline-block; animation: rocketHover 2s infinite; filter: drop-shadow(0 15px 15px rgba(0,0,0,0.1));}
-        @keyframes rocketHover { 0%, 100% { transform: translateY(0) rotate(45deg); } 50% { transform: translateY(-15px) rotate(45deg); } }
-
-        .letter-icon { font-size: 4.5rem; animation: float 3s infinite; }
-
-        /* Estilos Carta Final */
-        #step6 .card::before { display: none; } /* Quitamos la cinta de la carta final */
-        .typewriter-text { font-family: 'Caveat', cursive; text-align: left; font-size: 1.8rem; line-height: 1.3; color: #2d3436; font-weight: 700; }
-        .cursor { display: inline-block; width: 3px; height: 1.5rem; background: var(--text-accent); margin-left: 2px; animation: blink 0.8s infinite; vertical-align: middle; }
-        @keyframes blink { 50% { opacity: 0; } }
+        /* Overlay Inicio */
+        #start-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--bg-color);
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+        }
 
         audio { display: none; }
     </style>
@@ -197,175 +173,184 @@
 
     <audio id="bgMusic" src="beck.mp3" loop></audio>
 
-    <!-- PASO 0: INTRO -->
-    <div class="step active" id="step0">
-        <div class="card">
-            <div class="anim-container">
-                <div class="wave-emoji">👋</div>
-            </div>
+    <div class="stars-bg"></div>
+    <div class="stars-bg2"></div>
+
+    <!-- Overlay Inicio -->
+    <div id="start-overlay">
+        <h1 style="font-size: 2rem; margin-bottom: 0.5rem; text-shadow: 0 0 20px rgba(56, 189, 248, 0.8);">Constelación Ivonne</h1>
+        <p style="margin-bottom: 2rem;">Ponte los audífonos y prepárate para un viaje espacial por tus recuerdos.</p>
+        <button class="btn-space" onclick="startJourney()">Iniciar Viaje ✨</button>
+    </div>
+
+    <!-- ESCENAS (Constelaciones) -->
+    <div id="scenes-container">
+        
+        <!-- Scene 0 -->
+        <div class="scene active" id="scene-0">
+            <div class="celestial-body" style="--accent-glow: rgba(167, 139, 250, 0.8);">👋</div>
             <h1>Hola Ivonne</h1>
-            <p>Espero que estés muy bien. Ese día de la graduación fue un caos JAJAJ y no pude felicitarte como debía.</p>
-            <p>Preparé esto con cariño. Sube el volumen...</p>
+            <p>Espero que estés muy bien. Ese día de la graduación fue todo un caos JAJAJ y nunca te felicité como debía.</p>
+            <p>Ya no hablamos mucho y la verdad no soy de hablar por chat, pero espero que no me odies.</p>
+            <p>He preparado esta constelación de recuerdos para ti.</p>
+            <button class="btn-space" onclick="nextScene(1)">Siguiente estrella ➔</button>
         </div>
-        <button class="btn" onclick="nextStep(1)">¡Vamos! ✨</button>
-    </div>
 
-    <!-- PASO 1: CUMPLEAÑOS -->
-    <div class="step" id="step1">
-        <div class="card">
-            <div class="anim-container">
-                <div class="cake-emoji">🎂</div>
-            </div>
+        <!-- Scene 1 -->
+        <div class="scene" id="scene-1">
+            <div class="celestial-body" style="--accent-glow: rgba(244, 63, 94, 0.8);">🎂</div>
             <h1>24 de Enero</h1>
-            <p>Tu cumpleaños. Un día en el que el mundo ganó a alguien muy especial.</p>
-            <p>Te envío un poco de magia atrasada.</p>
+            <p>Tu cumpleaños. Un día en el que el universo ganó a alguien muy especial.</p>
+            <p>Sé que ya pasó hace tiempo, pero quería enviarte un poco de magia atrasada a través del espacio.</p>
+            <button class="btn-space" onclick="nextScene(2)">Viajar más allá ➔</button>
         </div>
-        <button class="btn" onclick="nextStep(2)">Siguiente 🎈</button>
-    </div>
 
-    <!-- PASO 2: NOMBRE Y SIGNO -->
-    <div class="step" id="step2">
-        <div class="card">
-            <div class="anim-container" style="position: relative;">
-                <div class="archery">🏹</div>
-                <div class="water">♒</div>
-            </div>
+        <!-- Scene 2 -->
+        <div class="scene" id="scene-2">
+            <div class="celestial-body" style="--accent-glow: rgba(14, 165, 233, 0.8);">♒</div>
             <h1>Acuario & Arquera</h1>
             <p>¿Sabías que <span class="highlight">Ivonne</span> significa "La Arquera"?</p>
-            <p>Independiente, original y siempre apuntas alto.</p>
+            <p>Eres un signo de aire: independiente, original y siempre apuntas a lo más alto. Una combinación astronómicamente increíble.</p>
+            <button class="btn-space" onclick="nextScene(3)">Siguiente estrella ➔</button>
         </div>
-        <button class="btn" onclick="nextStep(3)">Tu Camino 🌟</button>
-    </div>
 
-    <!-- PASO 3: PARVULARIO -->
-    <div class="step" id="step3">
-        <div class="card">
-            <div class="anim-container">
-                <div class="plant">🌱</div>
-            </div>
+        <!-- Scene 3 -->
+        <div class="scene" id="scene-3">
+            <div class="celestial-body" style="--accent-glow: rgba(16, 185, 129, 0.8);">🌱</div>
             <h1>Educadora</h1>
-            <p>Estudias <span class="highlight">Parvulario</span>. Tienes en tus manos sembrar las primeras semillitas en los niños.</p>
-            <p>Una labor hermosísima.</p>
+            <p>Estudias <span class="highlight">Parvulario</span>. Tienes en tus manos el poder de sembrar las primeras estrellas en la mente de los niños.</p>
+            <p>Es una de las labores más hermosas y valiosas del planeta.</p>
+            <button class="btn-space" onclick="nextScene(4)">Viajar más allá ➔</button>
         </div>
-        <button class="btn" onclick="nextStep(4)">El futuro 🚀</button>
-    </div>
 
-    <!-- PASO 4: CONSEJOS 20 AÑOS -->
-    <div class="step" id="step4">
-        <div class="card">
-            <div class="anim-container">
-                <div class="rocket">🚀</div>
-            </div>
+        <!-- Scene 4 -->
+        <div class="scene" id="scene-4">
+            <div class="celestial-body" style="--accent-glow: rgba(245, 158, 11, 0.8);">🚀</div>
             <h1>Tus 20's</h1>
-            <p>Viaja, lee, equivócate mucho y cuida tu salud mental.</p>
-            <p>Ríete fuerte y descubre qué te hace realmente feliz.</p>
+            <p>No dejes que la edad te abrume. El universo es vasto e infinito.</p>
+            <p>Viaja, lee, equivócate muchísimo y cuida tu <span class="highlight">salud mental</span>.</p>
+            <p>Aprende de finanzas, ríete fuerte y descubre qué es lo que realmente te hace brillar.</p>
+            <button class="btn-space" onclick="nextScene(5)">Última parada ➔</button>
         </div>
-        <button class="btn" onclick="nextStep(5)">Casi terminamos 💌</button>
-    </div>
 
-    <!-- PASO 5: CIERRE -->
-    <div class="step" id="step5">
-        <div class="card">
-            <div class="anim-container">
-                <div class="letter-icon">✉️</div>
-            </div>
+        <!-- Scene 5 -->
+        <div class="scene" id="scene-5">
+            <div class="celestial-body" style="--accent-glow: rgba(255, 255, 255, 0.8);">✉️</div>
             <h1>Para ti...</h1>
-            <p>Espero que te vaya increíble. Sé que es tarde para decir todo esto, pero... mejor tarde que nunca.</p>
-            <p>Te dejo esta reflexión.</p>
+            <p>Realmente espero que te vaya increíble en todo tu viaje.</p>
+            <p>Sé que es súper tarde para decirte todo esto, pero mejor tarde que nunca jajaja.</p>
+            <p>Antes de acabar, te dejo un mensaje cósmico que quiero que te lleves contigo. Cuídate mucho.</p>
+            <button class="btn-space" onclick="startPoem()">Leer mensaje 📜</button>
         </div>
-        <button class="btn" onclick="startPoem()">Abrir Carta 📜</button>
+
+        <!-- Scene 6 (Poema Final) -->
+        <div class="scene" id="scene-6">
+            <div class="celestial-body" style="--accent-glow: rgba(236, 72, 153, 0.8);">✨</div>
+            <div class="poem-text" id="typewriter"></div>
+            <button id="finalBtn" class="btn-space" style="display:none; margin-top: 3rem;" onclick="fireStars()">Un abrazo desde la Tierra ❤️</button>
+        </div>
+
     </div>
 
-    <!-- PASO 6: POEMA -->
-    <div class="step" id="step6">
-        <div class="card">
-            <div id="typewriter" class="typewriter-text"></div>
-            <span id="cursor" class="cursor"></span>
-        </div>
-        <button id="finalBtn" class="btn" style="display:none;" onclick="fireHearts()">Un abrazo ❤️</button>
-    </div>
-
+    <!-- Confetti CDN -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
+
     <script>
-        let currentStep = 0;
+        let currentScene = 0;
+        const music = document.getElementById('bgMusic');
 
-        function nextStep(step) {
-            const current = document.getElementById(`step${currentStep}`);
-            const next = document.getElementById(`step${step}`);
+        function startJourney() {
+            const overlay = document.getElementById('start-overlay');
+            overlay.style.opacity = '0';
+            overlay.style.transition = 'opacity 1s ease';
             
-            if (currentStep === 0) {
-                const music = document.getElementById('bgMusic');
-                music.volume = 0.5;
-                music.play().catch(() => console.log("Audio block"));
-            }
+            music.volume = 0.4;
+            music.play().catch(e => console.log("Audio block:", e));
 
-            // Animación de salida (Pop Out)
-            current.style.animation = 'popOut 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 1000);
+        }
+
+        function nextScene(step) {
+            const current = document.getElementById(`scene-${currentScene}`);
+            const next = document.getElementById(`scene-${step}`);
+            
+            // Efecto 3D de volar hacia adelante
+            current.classList.remove('active');
+            current.classList.add('passed'); // Hace que la escena viaje "hacia la cámara" y desaparezca
             
             setTimeout(() => {
-                current.classList.remove('active');
-                current.style.animation = ''; // Resetear animación
-                next.classList.add('active');
-                currentStep = step;
+                next.classList.add('active'); // La nueva escena entra desde el fondo
+                currentScene = step;
                 
-                if (step === 1) fireConfetti(); // Confeti solo en el cumpleaños
-            }, 400);
+                // Lluvia de estrellas en el cumpleaños
+                if (step === 1) fireStars(); 
+            }, 800); 
         }
 
-        const poem = `“Nunca es demasiado tarde, o en mi caso demasiado pronto, para ser quien quieras ser. No hay límite en el tiempo, empieza cuando quieras, puedes cambiar o no hacerlo, no hay normas al respecto.\n\nDe todo podemos sacar una lectura positiva o negativa, espero que tú saques la positiva. Espero que veas cosas que te sorprendan; espero que sientas cosas que nunca hayas sentido; espero que conozcas a personas con otro punto de vista; espero que vivas una vida de la que te sientas orgullosa; y si ves que no es así, espero que tengas la fortaleza para empezar de nuevo.”`;
+        const poemParagraphs = [
+            "“Nunca es demasiado tarde, o en mi caso demasiado pronto, para ser quien quieras ser.",
+            "No hay límite en el tiempo, empieza cuando quieras, puedes cambiar o no hacerlo, no hay normas al respecto.”",
+            "“De todo podemos sacar una lectura positiva o negativa, espero que tú saques la positiva.",
+            "Espero que veas cosas que te sorprendan; espero que sientas cosas que nunca hayas sentido; espero que conozcas a personas con otro punto de vista;",
+            "Espero que vivas una vida de la que te sientas orgullosa; y si ves que no es así, espero que tengas la fortaleza para empezar de nuevo.”"
+        ];
 
         function startPoem() {
-            nextStep(6);
-            let i = 0;
+            nextScene(6);
+            
+            let pIndex = 0;
             const target = document.getElementById('typewriter');
             const btn = document.getElementById('finalBtn');
-            const cursor = document.getElementById('cursor');
 
-            target.innerHTML = ''; 
-
-            function type() {
-                if (i < poem.length) {
-                    if (poem.charAt(i) === '\n') {
-                        target.innerHTML += '<br>';
-                    } else {
-                        target.innerHTML += poem.charAt(i);
-                    }
-                    i++;
-                    let speed = poem.charAt(i - 1) === '.' || poem.charAt(i - 1) === ';' ? 400 : 35;
-                    setTimeout(type, speed);
-                } else {
-                    cursor.style.display = 'none';
+            function showParagraph() {
+                if (pIndex >= poemParagraphs.length) {
                     btn.style.display = 'block';
-                    setTimeout(() => btn.style.opacity = '1', 100);
-                    fireHearts();
+                    // Dispara estrellas al mostrar el botón final
+                    fireStars();
+                    return;
                 }
+
+                target.style.opacity = '0';
+                
+                setTimeout(() => {
+                    target.innerHTML = poemParagraphs[pIndex];
+                    target.style.opacity = '1';
+                    
+                    // Tiempo de lectura (calculado por longitud para evitar que sea muy rápido)
+                    const timeToRead = Math.max(poemParagraphs[pIndex].length * 60, 3500);
+                    
+                    pIndex++;
+                    setTimeout(showParagraph, timeToRead);
+                }, 1000); // 1s de transición (fade out)
             }
-            setTimeout(type, 1000);
+
+            // Iniciar la lectura de la carta un poco después de que aparezca la escena
+            setTimeout(showParagraph, 1500); 
         }
 
-        // Efectos de confeti
-        function fireConfetti() {
-            confetti({
-                particleCount: 100,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: ['#ff9a9e', '#fecfef', '#a1c4fd']
-            });
-        }
+        // Efectos Visuales (Lluvia de estrellas en lugar de confeti)
+        function fireStars() {
+            const duration = 3000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
 
-        function fireHearts() {
-            confetti({
-                spread: 360,
-                ticks: 100,
-                gravity: 0.5,
-                decay: 0.94,
-                startVelocity: 30,
-                shapes: ['heart'],
-                colors: ['#ff6b6b', '#ff9a9e'],
-                particleCount: 80,
-                scalar: 2
-            });
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                const particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }, colors: ['#ffffff', '#38bdf8'] }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }, colors: ['#ffffff', '#a855f7'] }));
+            }, 250);
         }
     </script>
 </body>
