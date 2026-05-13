@@ -127,29 +127,93 @@
 
         #constellation {
             position: absolute;
-            top: 5%;
+            top: 18%;
+            /* Bajamos la constelación para que no solape con la luna */
             left: 50%;
             transform: translateX(-50%);
             width: 100%;
             max-width: 500px;
             height: 300px;
-            z-index: 1;
+            z-index: 10;
+            /* Por encima para poder clickear */
             opacity: 0;
             transition: opacity 2s ease;
             pointer-events: none;
+            /* Dejamos pasar clics al mar */
         }
 
         #constellation.visible {
             opacity: 1;
         }
 
-        .draw-line {
-            animation: drawPath 4s ease-in-out forwards;
+        /* --- Estilos del Rompecabezas de Estrellas --- */
+        .interactive-star {
+            cursor: pointer;
+            pointer-events: none;
+            /* Solo activamos la que toca */
+            transform-origin: center;
         }
 
-        @keyframes drawPath {
-            to {
-                stroke-dashoffset: 0;
+        .interactive-star.active {
+            pointer-events: auto;
+        }
+
+        .interactive-star.active .star-core {
+            animation: pulseStar 1s infinite alternate;
+            filter: drop-shadow(0 0 10px #ffffff);
+        }
+
+        .interactive-star.completed .star-core {
+            filter: drop-shadow(0 0 15px #fef08a);
+        }
+
+        @keyframes pulseStar {
+            0% {
+                r: 3;
+                opacity: 0.8;
+            }
+
+            100% {
+                r: 6;
+                opacity: 1;
+            }
+        }
+
+        .star-line {
+            transition: stroke-dashoffset 1.5s ease-in-out;
+        }
+
+        #shooting-star {
+            position: absolute;
+            top: -50px;
+            right: 20%;
+            width: 3px;
+            height: 60px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+            box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0.8);
+            transform: rotate(-45deg);
+            opacity: 0;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .falling {
+            animation: shootStar 1.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+        }
+
+        @keyframes shootStar {
+            0% {
+                transform: translate(0, 0) rotate(-45deg);
+                opacity: 1;
+            }
+
+            80% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-80vw, 80vh) rotate(-45deg);
+                opacity: 0;
             }
         }
 
@@ -295,7 +359,8 @@
             }
 
             50% {
-                transform: translate(-25px, -15px) rotate(8deg); /* La corriente la mueve hacia la izquierda y arriba */
+                transform: translate(-25px, -15px) rotate(8deg);
+                /* La corriente la mueve hacia la izquierda y arriba */
             }
         }
 
@@ -310,6 +375,7 @@
                 transform: translate(0, 0) rotate(0deg);
                 opacity: 1;
             }
+
             100% {
                 transform: translate(-100vw, 20px) rotate(-45deg);
                 opacity: 0;
@@ -329,6 +395,7 @@
                 margin-left: -100vw;
                 opacity: 0;
             }
+
             100% {
                 margin-left: 0;
                 opacity: 1;
@@ -340,6 +407,7 @@
                 margin-left: 100vw;
                 opacity: 0;
             }
+
             100% {
                 margin-left: 0;
                 opacity: 1;
@@ -522,29 +590,609 @@
         audio {
             display: none;
         }
+
+        /* --- Minijuego Pastel --- */
+        #cake-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .cake-btn {
+            background: #b45309;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, background 0.2s;
+            margin-top: 15px;
+        }
+
+        .cake-btn:hover {
+            transform: scale(1.05);
+            background: #92400e;
+        }
+
+        .cake {
+            position: relative;
+            width: 120px;
+            height: 50px;
+            background: #fef08a;
+            /* Bizcocho */
+            border-radius: 10px 10px 0 0;
+            border: 2px solid #b45309;
+            border-bottom: none;
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+            box-shadow: inset 0 -10px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .cake-base {
+            position: absolute;
+            bottom: -10px;
+            width: 150px;
+            height: 20px;
+            background: #cbd5e1;
+            /* Plato */
+            border-radius: 50%;
+            border: 2px solid #94a3b8;
+            z-index: -1;
+        }
+
+        .candles {
+            position: absolute;
+            top: -25px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .candle-wrapper {
+            position: relative;
+            cursor: pointer;
+            padding: 5px;
+            /* Area de clic */
+            margin-top: -5px;
+        }
+
+        .candle-stick {
+            width: 10px;
+            height: 25px;
+            background: repeating-linear-gradient(45deg,
+                    #fca5a5,
+                    #fca5a5 4px,
+                    #ffffff 4px,
+                    #ffffff 8px);
+            border: 1px solid #ef4444;
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .flame {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10px;
+            height: 15px;
+            background: #fef08a;
+            border-radius: 50% 50% 20% 20%;
+            box-shadow: 0 0 10px #fef08a, 0 0 15px #f97316;
+            animation: flicker 0.5s infinite alternate;
+            transition: opacity 0.3s;
+        }
+
+        .flame.extinguished {
+            opacity: 0;
+            animation: none;
+        }
+
+        @keyframes flicker {
+            0% {
+                transform: translateX(-50%) scale(1) rotate(-2deg);
+                opacity: 0.9;
+            }
+
+            100% {
+                transform: translateX(-50%) scale(1.1) rotate(2deg);
+                opacity: 1;
+            }
+        }
+
+        /* --- Minijuego Borrador --- */
+        #eraser-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .scratch-wrapper {
+            position: relative;
+            width: 250px;
+            height: 120px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px dashed rgba(180, 83, 9, 0.3);
+            margin-bottom: 15px;
+        }
+
+        .scratch-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(254, 240, 138, 0.3);
+            text-align: center;
+            padding: 10px;
+        }
+
+        #scratch-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            transition: opacity 1s ease;
+        }
+
+        /* --- Minijuego Semillita --- */
+        #seed-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 15px;
+            margin-bottom: 70px;
+            position: relative;
+            height: 180px;
+            width: 100%;
+        }
+
+        .cloud {
+            position: absolute;
+            top: 0;
+            width: 80px;
+            height: 40px;
+            background: #cbd5e1;
+            border-radius: 40px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s, transform 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            z-index: 5;
+        }
+
+        .cloud::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 15px;
+            width: 30px;
+            height: 30px;
+            background: #cbd5e1;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .cloud::after {
+            content: '';
+            position: absolute;
+            top: -25px;
+            right: 15px;
+            width: 45px;
+            height: 45px;
+            background: #cbd5e1;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .cloud:hover {
+            transform: scale(1.05);
+        }
+
+        .cloud.raining,
+        .cloud.raining::before,
+        .cloud.raining::after {
+            background: #64748b;
+        }
+
+        .rain-area {
+            position: absolute;
+            top: 40px;
+            width: 60px;
+            height: 80px;
+            display: flex;
+            justify-content: space-between;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .cloud.raining .rain-area {
+            opacity: 1;
+        }
+
+        .drop {
+            width: 2px;
+            height: 10px;
+            background: #38bdf8;
+            border-radius: 2px;
+            animation: fall 0.5s linear infinite;
+        }
+
+        .drop:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .drop:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(0);
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(60px);
+                opacity: 0;
+            }
+        }
+
+        .pot {
+            position: absolute;
+            bottom: 0;
+            width: 60px;
+            height: 40px;
+            background: #b45309;
+            border-radius: 5px 5px 20px 20px;
+            border-top: 10px solid #92400e;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            z-index: 2;
+        }
+
+        .flower {
+            position: absolute;
+            bottom: 35px;
+            width: 40px;
+            height: 80px;
+            transform-origin: bottom center;
+            transform: scaleY(0);
+            transition: transform 3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1;
+        }
+
+        .flower.grown {
+            transform: scaleY(1);
+        }
+
+        .stem {
+            position: absolute;
+            bottom: 0;
+            left: 18px;
+            width: 4px;
+            height: 50px;
+            background: #22c55e;
+            border-radius: 2px;
+        }
+
+        .leaf-left {
+            position: absolute;
+            bottom: 15px;
+            left: 5px;
+            width: 15px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 15px 0;
+            transform: rotate(-20deg);
+        }
+
+        .leaf-right {
+            position: absolute;
+            bottom: 25px;
+            right: 5px;
+            width: 15px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 0 15px;
+            transform: rotate(20deg);
+        }
+
+        .sunflower-head {
+            position: absolute;
+            top: 5px;
+            left: 0;
+            width: 40px;
+            height: 40px;
+            background: #fbbf24;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+            animation: spin 10s linear infinite;
+        }
+
+        .sunflower-core {
+            width: 20px;
+            height: 20px;
+            background: #451a03;
+            border-radius: 50%;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* --- Minijuego Promesas (Bucket List) --- */
+        #checklist-container {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+            position: relative;
+        }
+
+        .promise-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .promise-item:hover {
+            background: rgba(120, 53, 15, 0.05);
+        }
+
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #78350f;
+            border-radius: 3px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .promise-item.checked .checkbox::after {
+            content: '✔';
+            color: #b45309;
+            font-size: 1.2rem;
+            font-weight: bold;
+            position: absolute;
+            top: -5px;
+        }
+
+        .promise-item.checked span {
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+
+        .promise-item span {
+            font-family: 'Inter', sans-serif;
+            color: #451a03;
+            font-size: 0.95rem;
+            line-height: 1.3;
+        }
+
+        #approval-stamp {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(2) rotate(-15deg);
+            opacity: 0;
+            color: #dc2626;
+            border: 4px solid #dc2626;
+            padding: 10px 15px;
+            font-family: 'Playfair Display', serif;
+            font-weight: bold;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            border-radius: 8px;
+            pointer-events: none;
+            text-shadow: 0 0 2px rgba(220, 38, 38, 0.5);
+            box-shadow: inset 0 0 4px rgba(220, 38, 38, 0.3), 0 0 4px rgba(220, 38, 38, 0.3);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+        }
+
+        #approval-stamp.stamped {
+            transform: translate(-50%, -50%) scale(1) rotate(-15deg);
+            opacity: 1;
+        }
+
+        #constellation-hint {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fef08a;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1.5s ease;
+            text-shadow: 0 0 10px rgba(254, 240, 138, 0.8);
+            z-index: 10;
+        }
+
+        #constellation-hint.show {
+            opacity: 1;
+        }
+
+        .chest-wrapper {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 80px;
+            cursor: pointer;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            z-index: 20;
+        }
+
+        .chest-wrapper.emerged {
+            display: flex;
+            animation: emergeChest 3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        @keyframes emergeChest {
+            0% {
+                transform: translate(-50%, 150px) rotate(-10deg);
+                opacity: 0;
+            }
+
+            50% {
+                transform: translate(-50%, -20px) rotate(5deg);
+                opacity: 1;
+            }
+
+            70% {
+                transform: translate(-50%, 0) rotate(-2deg);
+            }
+
+            100% {
+                transform: translate(-50%, 0) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .chest {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.6));
+            transition: transform 0.3s;
+        }
+
+        .chest-wrapper:hover .chest {
+            transform: scale(1.1) rotate(2deg);
+        }
+
+        .chest-glow {
+            position: absolute;
+            top: -15px;
+            color: #fef08a;
+            font-size: 1.5rem;
+            text-shadow: 0 0 15px gold, 0 0 30px gold;
+            animation: pulse-glow 2s infinite alternate;
+            pointer-events: none;
+        }
+
+        /* --- Pantalla de Créditos --- */
+        #credits-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 2s ease;
+            z-index: 50;
+            /* Por encima de todo */
+            pointer-events: none;
+            overflow: hidden;
+            background: transparent;
+        }
+
+        .credits-content {
+            position: absolute;
+            bottom: -150%;
+            width: 80%;
+            max-width: 600px;
+            color: #ffffff;
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            padding-bottom: 50%;
+        }
+
+        .credits-content.crawling {
+            animation: crawlUp 50s linear forwards;
+        }
+
+        .credits-content h3 {
+            font-family: 'Playfair Display', serif;
+            color: #fef08a;
+            font-size: 1.5rem;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .credits-content p {
+            margin-bottom: 1rem;
+        }
+
+        @keyframes crawlUp {
+            0% {
+                bottom: -150%;
+            }
+
+            100% {
+                bottom: 150%;
+            }
+        }
     </style>
 </head>
 
 <body>
 
     <!-- Audio de Fondo (Música) -->
-    <audio id="bgMusic" src="beck.mp3" loop></audio>
+    <audio id="bgMusic" src="winter.mp3" loop></audio>
 
     <!-- Pantalla de Instrucciones / Intro (Mapa del Tesoro) -->
     <div id="intro-screen">
         <div class="treasure-map">
             <h1
                 style="font-family:'Playfair Display', serif; color:#78350f; margin-bottom:1rem; font-size:2rem; border-bottom: 2px dashed rgba(120,53,15,0.3); padding-bottom: 0.8rem;">
-                🗺️ El Mapa del Tesoro</h1>
+                HOLA</h1>
 
             <div
                 style="font-size:1.05rem; line-height:1.6; color:#451a03; margin-bottom:1.5rem; font-family: 'Inter', sans-serif;">
-                <p style="margin-bottom:0.8rem;">Hola, espero que estés muy bien. Creo que nunca te felicité por la
-                    graduación, ese día fue caótico JAJAJ.</p>
-                <p style="margin-bottom:0.8rem;">Ya no hablamos mucho y la verdad no me gusta hablar por chat, espero
-                    que no me odies.</p>
-                <p style="margin-bottom:0.8rem;">Lo siguiente que vas a ver es una recapitulación de una muy buena
-                    información que preparé. Espero que a donde mande esto, siga siendo tu número.</p>
+                <p style="margin-bottom:0.8rem;">Espero que estes muy bien. <br>
+                    Se que no hablamos desde hace tiempo
+                    pos la verdad no me gusta mucho hablar por chat, espero que no me odies por eso.</p>
+                <p style="margin-bottom:0.8rem;">La ultima vez que nos vimos fue en la graduacion ese dia fue caotico
+                    JAJAJ.</p>
+                <p style="margin-bottom:0.8rem;">Bueno ojala te guste lo que prepare en esta web, ojala a donde mande
+                    esto siga siendo tu numero.</p>
             </div>
 
             <div
@@ -555,16 +1203,13 @@
                 <p style="font-size:0.9rem; color:#451a03; line-height: 1.6; text-align: left;">
                     1. 📜 Abre los mensajes en las botellas (del 1 al 4).<br>
                     2. 🔍 Hay un secreto esperando ser descubierto en el paisaje nocturno.<br>
-                    3. ✖ La "X" marca el final del recorrido.
+                    3. ✖ La "X" marca el final del recorrido. <br>
+                    4. ten en cuenta el volumen hay una musica suave que acompaña la experiencia.
                 </p>
             </div>
 
-            <div
-                style="text-align: center; color: #78350f; letter-spacing: 5px; font-weight: bold; margin-bottom: 0.5rem; font-size: 1.2rem;">
-                | | | <br>✖
-            </div>
 
-            <button onclick="startExperience()" class="btn-map">Zarpar al mar</button>
+            <button onclick="startExperience()" class="btn-map">Empezar</button>
         </div>
     </div>
 
@@ -573,15 +1218,46 @@
     <!-- La Luna (Secreta) -->
     <div id="moon" onclick="openSecret('moon')"></div>
 
-    <!-- Constelación Acuario (Secreta al final) -->
+    <!-- Estrella Fugaz -->
+    <div id="shooting-star"></div>
+
+    <div id="constellation-hint">
+        Toca las estrellas de tu constelación<br>para revelar el tesoro...
+    </div>
+
+    <!-- Constelación Acuario (Rompecabezas Interactivo) -->
     <svg id="constellation" viewBox="0 0 300 200">
-        <path id="constellation-path" d="M30,150 L80,100 L150,110 L230,50 L270,90" fill="none"
-            stroke="rgba(255,255,255,0.6)" stroke-width="2" stroke-dasharray="400" stroke-dashoffset="400" />
-        <circle cx="30" cy="150" r="3" fill="#ffffff" filter="drop-shadow(0 0 5px white)" />
-        <circle cx="80" cy="100" r="4" fill="#fef08a" filter="drop-shadow(0 0 8px #fef08a)" />
-        <circle cx="150" cy="110" r="3" fill="#ffffff" filter="drop-shadow(0 0 5px white)" />
-        <circle cx="230" cy="50" r="5" fill="#38bdf8" filter="drop-shadow(0 0 10px #38bdf8)" />
-        <circle cx="270" cy="90" r="3" fill="#ffffff" filter="drop-shadow(0 0 5px white)" />
+        <!-- Líneas separadas, inicialmente ocultas por stroke-dashoffset -->
+        <path id="line-1" d="M30,150 L80,100" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"
+            stroke-dasharray="100" stroke-dashoffset="100" class="star-line" />
+        <path id="line-2" d="M80,100 L150,110" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"
+            stroke-dasharray="100" stroke-dashoffset="100" class="star-line" />
+        <path id="line-3" d="M150,110 L230,50" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"
+            stroke-dasharray="150" stroke-dashoffset="150" class="star-line" />
+        <path id="line-4" d="M230,50 L270,90" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"
+            stroke-dasharray="100" stroke-dashoffset="100" class="star-line" />
+
+        <!-- Estrellas interactivas -->
+        <g class="interactive-star" id="star-0" onclick="clickStar(0)">
+            <circle cx="30" cy="150" r="20" fill="transparent" />
+            <circle cx="30" cy="150" r="3" fill="#ffffff" class="star-core" filter="drop-shadow(0 0 5px white)" />
+        </g>
+        <g class="interactive-star" id="star-1" onclick="clickStar(1)">
+            <circle cx="80" cy="100" r="20" fill="transparent" />
+            <circle cx="80" cy="100" r="4" fill="#fef08a" class="star-core" filter="drop-shadow(0 0 8px #fef08a)" />
+        </g>
+        <g class="interactive-star" id="star-2" onclick="clickStar(2)">
+            <circle cx="150" cy="110" r="20" fill="transparent" />
+            <circle cx="150" cy="110" r="3" fill="#ffffff" class="star-core" filter="drop-shadow(0 0 5px white)" />
+        </g>
+        <g class="interactive-star" id="star-3" onclick="clickStar(3)">
+            <circle cx="230" cy="50" r="20" fill="transparent" />
+            <circle cx="230" cy="50" r="5" fill="#38bdf8" class="star-core" filter="drop-shadow(0 0 10px #38bdf8)" />
+        </g>
+        <g class="interactive-star" id="star-4" onclick="clickStar(4)">
+            <circle cx="270" cy="90" r="20" fill="transparent" />
+            <circle cx="270" cy="90" r="3" fill="#ffffff" class="star-core" filter="drop-shadow(0 0 5px white)" />
+        </g>
     </svg>
 
     <!-- La Isla en el horizonte -->
@@ -615,10 +1291,21 @@
             <div class="bottle-number">4</div>
         </div>
 
-        <!-- Botella Final Especial -->
-        <div class="bottle-wrapper special" id="b4" onclick="openMessage(4)">
-            <div class="bottle"></div>
-            <div class="bottle-number" style="background: rgba(234, 179, 8, 0.4); box-shadow: 0 0 10px gold;">★</div>
+        <!-- Cofre Final Especial -->
+        <div class="chest-wrapper special" id="b4" onclick="openMessage(4)">
+            <svg class="chest" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <!-- Base del cofre -->
+                <path d="M 10 50 L 90 50 L 85 90 L 15 90 Z" fill="#8B4513" stroke="#D2691E" stroke-width="2" />
+                <!-- Tapa del cofre -->
+                <path d="M 5 50 Q 50 10 95 50 Z" fill="#A0522D" stroke="#D2691E" stroke-width="2" />
+                <!-- Bordes dorados -->
+                <path d="M 10 50 L 90 50" stroke="#FFD700" stroke-width="4" />
+                <path d="M 30 50 L 30 90 M 70 50 L 70 90" stroke="#FFD700" stroke-width="3" />
+                <!-- Cerradura dorada -->
+                <circle cx="50" cy="55" r="6" fill="#FFD700" />
+                <path d="M 48 55 L 48 65 L 52 65 L 52 55 Z" fill="#000000" />
+            </svg>
+            <div class="chest-glow">★</div>
         </div>
     </div>
 
@@ -627,9 +1314,100 @@
     <!-- Modal Pergamino (Mensajes principales) -->
     <div id="message-modal" class="modal-container">
         <div class="parchment" id="parchment">
-            <button class="close-btn" onclick="closeMessage()">✖</button>
+            <button class="close-btn" id="modal-close-btn" onclick="closeMessage()">✖</button>
             <h2 id="msg-title">Título</h2>
             <div id="msg-content">Contenido</div>
+
+            <div id="cake-container">
+                <div class="cake">
+                    <div class="candles">
+                        <div class="candle-wrapper" onclick="blowCandle(1)">
+                            <div class="flame" id="flame-1"></div>
+                            <div class="candle-stick"></div>
+                        </div>
+                        <div class="candle-wrapper" onclick="blowCandle(2)">
+                            <div class="flame" id="flame-2"></div>
+                            <div class="candle-stick"></div>
+                        </div>
+                        <div class="candle-wrapper" onclick="blowCandle(3)">
+                            <div class="flame" id="flame-3"></div>
+                            <div class="candle-stick"></div>
+                        </div>
+                    </div>
+                    <div class="cake-base"></div>
+                </div>
+                <p
+                    style="margin-top: 30px; font-style: italic; color: #b45309; text-align: center; font-size: 0.95rem; line-height: 1.4;">
+                    Pide un deseo y pulsa las velas para apagarlas...
+                </p>
+            </div>
+
+            <div id="eraser-container">
+                <div class="scratch-wrapper">
+                    <div class="scratch-content">
+                        <div
+                            style="font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: bold; color: #b45309; margin-bottom: 5px;">
+                            Ivonne</div>
+                        <div style="font-family: 'Inter', sans-serif; font-size: 1rem; color: #451a03; line-height: 1.4;"
+                            id="eraser-final-text"></div>
+                    </div>
+                    <canvas id="scratch-canvas"></canvas>
+                </div>
+                <p
+                    style="font-style: italic; color: #b45309; text-align: center; font-size: 0.95rem; line-height: 1.4;">
+                    Pasa tu dedo sobre el error para borrarlo...
+                </p>
+            </div>
+
+            <div id="seed-container">
+                <div class="cloud" id="seed-cloud" onclick="waterSeed()">
+                    <div class="rain-area">
+                        <div class="drop"></div>
+                        <div class="drop"></div>
+                        <div class="drop"></div>
+                    </div>
+                </div>
+
+                <div class="flower" id="magic-flower">
+                    <div class="stem"></div>
+                    <div class="leaf-left"></div>
+                    <div class="leaf-right"></div>
+                    <div class="sunflower-head">
+                        <div class="sunflower-core"></div>
+                    </div>
+                </div>
+
+                <div class="pot"></div>
+
+                <p id="seed-hint"
+                    style="position: absolute; top: 100%; margin-top: 15px; width: 100%; font-style: italic; color: #b45309; text-align: center; font-size: 0.95rem; line-height: 1.4; transition: opacity 0.5s; z-index: 10;">
+                    Toca la nube para regar la semillita...
+                </p>
+                <p id="seed-success-text"
+                    style="position: absolute; top: 100%; margin-top: 15px; width: 100%; font-weight: 600; color: #22c55e; text-align: center; font-size: 0.95rem; line-height: 1.4; opacity: 0; transition: opacity 1s; z-index: 10;">
+                    Es un trabajo valioso que requiere muchísimo corazón.
+                </p>
+            </div>
+
+            <div id="checklist-container">
+                <div class="promise-item" onclick="togglePromise(0)" id="promise-0">
+                    <div class="checkbox"></div>
+                    <span>Prometo viajar y perderme un poco.</span>
+                </div>
+                <div class="promise-item" onclick="togglePromise(1)" id="promise-1">
+                    <div class="checkbox"></div>
+                    <span>Prometo equivocarme sin sentir culpa.</span>
+                </div>
+                <div class="promise-item" onclick="togglePromise(2)" id="promise-2">
+                    <div class="checkbox"></div>
+                    <span>Prometo cuidar mi salud mental por encima de todo.</span>
+                </div>
+                <div class="promise-item" onclick="togglePromise(3)" id="promise-3">
+                    <div class="checkbox"></div>
+                    <span>Prometo reírme hasta que me duela la panza.</span>
+                </div>
+                <div id="approval-stamp">¡LISTA PARA LOS 20's!</div>
+            </div>
         </div>
     </div>
 
@@ -638,11 +1416,42 @@
         <div class="secret-content moon-style" id="moon-content">
             <button class="close-btn" onclick="closeSecret('moon')">✖</button>
             <p>"A veces los mensajes en botellas sí llegan a su destino.<br><br>Espero que volvamos a hablar algún día."
+                <br> <br> Ya puedes cerrar el navegador.
             </p>
         </div>
     </div>
 
+    <!-- Pantalla de Créditos -->
+    <div id="credits-screen">
+        <div class="credits-content" id="credits-content">
+            <p style="font-size: 1.3rem; margin-bottom: 4rem;">
+                Ya encontraste el tesoro, espero que te haya gustado toda esta interacción y te haya sacado una sonrisa,
+                nos vemos cuidate.
+            </p>
 
+            <h3>Curiosidades</h3>
+            <p>La constelación que aparece es la de Acuario, tu signo y el mío también.</p>
+            <p style="font-style: italic; color: #cbd5e1;">El agua no es el único elemento que fluye; las ideas, los
+                sueños y el tiempo también lo hacen. Así que deja que tu vida fluya a tu ritmo.</p>
+
+            <h3>Música</h3>
+            <p>Morunas - Winter Days</p>
+            <p style="margin-top: 1.5rem; font-size: 0.95rem; color: #94a3b8;">otras opciones que si quieres puedes
+                escuchar:</p>
+            <p>molok0 - Los ruidos</p>
+            <p>Latin Mafia - atardecer</p>
+            <p>Kuwada - Gone</p>
+
+            <h3>Autor</h3>
+            <p>Fernando Maydana</p>
+        </div>
+    </div>
+
+    <!-- Pista de la Luna Final -->
+    <div id="final-moon-hint"
+        style="position: fixed; top: 35%; left: 50%; transform: translateX(-50%); color: #fef08a; font-family: 'Playfair Display', serif; font-size: 1.2rem; font-style: italic; text-align: center; opacity: 0; transition: opacity 3s ease; pointer-events: none; z-index: 60; text-shadow: 0 0 10px rgba(254, 240, 138, 0.5);">
+        Esa luna está muy brillante... <br> Púlsala a ver qué pasa.
+    </div>
 
     <!-- Confetti CDN -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -653,26 +1462,38 @@
         // --- Lógica de la Aplicación ---
         const messages = [
             {
-                title: "24 de Enero, 2006",
-                content: "<p>Tu cumpleaños.</p><p>Sé que es tarde para mencionar esto, pero nunca es un mal momento para recordar que el mundo ganó a alguien muy especial ese día.</p>",
-                callback: fireConfetti
+                title: "24 de Enero",
+                content: "<p>Tu cumpleaños.</p><p>Sé que es tarde para mencionar esto, pero ya sabes que dicen mejor tarde que nunca jajaja, espero que la hayas pasado bien ese dia no se cumple 20 años siempre. <br> Nunca es tarde para soplar las velas de tu cumpleaños.</p><div style='text-align: center;'><button id='btn-show-cake' class='cake-btn' onclick='showCake()'>Soplar Velas</button></div>",
             },
             {
-                title: "Acuario & Arquera",
-                content: "<p>¿Sabías que tu nombre, Ivonne, significa 'La Arquera'?</p><p>Y siendo Acuario (el portador de agua), tu elemento es el aire. Eres una persona independiente, original e impredecible. Siempre apuntando lejos.</p>"
+                title: "Tu nombre...",
+                content: "<p>Ivonne es un nombre curioso es la primera vez que lo escuche y pensaba que se escribia Ibon jajaj.</p><div style='text-align: center;'><button id='btn-show-eraser' class='cake-btn' onclick='showEraser()'>Borrar Error</button></div>",
             },
             {
-                title: "Las Semillitas",
-                content: "<p>Sé que estás estudiando Parvulario.</p><p>Es una labor hermosa. Tienes en tus manos el poder de formar las primeras semillitas en la mente de los niños. Es un trabajo valioso que requiere muchísimo corazón.</p>"
+                title: "Tus estudios..",
+                content: "<p>Sé que estás estudiando Parvulario espero que te este llendo bien no se que se avanza en esos cursos jajaja pero se que haras un gran trabajo con los mocosos. <br><br> ¿Tu sabías que durante los primeros 5 años de vida el cerebro humano se desarrolla más rápido que en cualquier otra etapa?</p><p>Tienes en tus manos el poder de formar esas primeras semillitas...</p><div style='text-align: center;'><button id='btn-show-seed' class='cake-btn' onclick='showSeedMinigame()'>Regar la semillita</button></div>"
             },
             {
                 title: "Tus 20's",
-                content: "<p>Tienes 20 años ahora. No te aburras, ni dejes que la edad o el futuro te abrumen.</p><p>Viaja, equivócate muchísimo, aprende. Cuida tu salud mental, ríete fuerte y descubre qué es lo que realmente te hace feliz.</p>"
+                content: "<p>Tienes 20 años ahora. A esta edad solemos sentir la presión de tener la vida resuelta, pero es mentira. Es la década exacta para experimentar, cambiar de opinión y descubrir quién eres realmente.</p><p>Haz un pacto contigo misma antes de continuar:</p>"
             },
             {
-                title: "El Curioso Caso...",
-                content: "<p>Realmente espero que te vaya bien.</p><p class='poem-style'>“Nunca es demasiado tarde, o en mi caso demasiado pronto, para ser quien quieras ser.<br><br>No hay límite en el tiempo, empieza cuando quieras, puedes cambiar o no hacerlo no hay normas al respecto.<br><br>De todo podemos sacar una lectura positiva o negativa, espero que tú saques la positiva.<br><br>Espero que veas cosas que te sorprendan; espero que sientas cosas que nunca hayas sentido; espero que conozcas a personas con otro punto de vista;<br><br>espero que vivas una vida de la que te sientas orgullosa; y si ves que no es así, espero que tengas la fortaleza para empezar de nuevo.”</p><p style='text-align:center; margin-top:20px; font-weight:bold; color:#b45309;'>Te cuidas.</p>",
-                callback: fireHearts
+                title: "El Verdadero Tesoro...",
+                typewriter: true,
+                paragraphs: [
+                    "Este es un poema que espero que te guste y te haga pensar de lo que sigue de aca para adelante.",
+                    "“Si te sirve de algo nunca es muy tarde, o en mi caso demasiado pronto, para ser quien tu quieras ser.",
+                    "No hay límite de tiempo, empieza cuando quieras,",
+                    "puedes cambiar o seguir igual, la vida no tiene reglas.",
+                    "Sacale provecho o desperdiciala, espero que la aproveches",
+                    "Espero que veas cosas que te sorprendan;",
+                    "Espero que sientas cosas que jamás hayas sentido;",
+                    "Espero que conozcas personas con opiniones diferentes;",
+                    "Espero que este orgullosa de tu vida;",
+                    "y si descrubes de que no,",
+                    "espero que tengas la fuerza y empieces otravez”"
+                ],
+                callback: finishExperience
             }
         ];
 
@@ -680,6 +1501,7 @@
         let currentMessageIndex = -1;
         const openedBottles = new Set();
         let finalEmerged = false;
+        let currentStar = 0; // Progreso del puzzle de estrellas
 
         function startExperience() {
             startMusic();
@@ -688,7 +1510,7 @@
             intro.style.transform = 'scale(1.2)';
             setTimeout(() => {
                 intro.style.display = 'none';
-                
+
                 // Hacer que la primera botella llegue flotando desde la izquierda
                 const b0 = document.getElementById('b0');
                 if (b0) {
@@ -707,15 +1529,366 @@
             }
         }
 
+        // Variables for Cake minigame
+        let blownCandles = 0;
+
+        function showCake() {
+            document.getElementById('btn-show-cake').style.display = 'none';
+            document.getElementById('cake-container').style.display = 'flex';
+            blownCandles = 0;
+            // Reset flames
+            for (let i = 1; i <= 3; i++) {
+                document.getElementById('flame-' + i).classList.remove('extinguished');
+            }
+        }
+
+        function blowCandle(id) {
+            const flame = document.getElementById('flame-' + id);
+            if (!flame.classList.contains('extinguished')) {
+                flame.classList.add('extinguished');
+                blownCandles++;
+
+                if (blownCandles === 3) {
+                    // Todas apagadas
+                    fireConfetti();
+                    setTimeout(() => {
+                        closeMessage();
+                    }, 2500);
+                }
+            }
+        }
+
+        // Variables for Eraser minigame
+        let isDrawing = false;
+        let scratchCtx;
+        let scratchCanvas;
+        let canvasCleared = false;
+
+        function showEraser() {
+            document.getElementById('btn-show-eraser').style.display = 'none';
+            document.getElementById('eraser-container').style.display = 'flex';
+            document.getElementById('eraser-final-text').innerText = "Bonito nombre la verdad.";
+
+            scratchCanvas = document.getElementById('scratch-canvas');
+            scratchCtx = scratchCanvas.getContext('2d', { willReadFrequently: true });
+            canvasCleared = false;
+
+            // Configurar canvas para que coincida con el CSS size
+            scratchCanvas.width = 250;
+            scratchCanvas.height = 120;
+            scratchCanvas.style.opacity = '1';
+
+            // Pintar la textura inicial
+            scratchCtx.globalCompositeOperation = 'source-over';
+            scratchCtx.fillStyle = '#e2e8f0'; // Color lápiz/borrador base
+            scratchCtx.fillRect(0, 0, scratchCanvas.width, scratchCanvas.height);
+
+            // Escribir el texto de error "Ibon"
+            scratchCtx.fillStyle = '#475569'; // Color de lápiz oscuro
+            scratchCtx.font = "italic bold 40px 'Playfair Display', serif";
+            scratchCtx.textAlign = "center";
+            scratchCtx.textBaseline = "middle";
+            scratchCtx.fillText("Ibon", scratchCanvas.width / 2, scratchCanvas.height / 2);
+
+            // Configurar el borrador
+            scratchCtx.lineJoin = "round";
+            scratchCtx.lineCap = "round";
+            scratchCtx.lineWidth = 35; // Tamaño del borrador
+            scratchCtx.globalCompositeOperation = 'destination-out';
+
+            // Eventos
+            scratchCanvas.addEventListener('mousedown', handlePointerDown);
+            scratchCanvas.addEventListener('mousemove', handlePointerMove);
+            scratchCanvas.addEventListener('mouseup', handlePointerUp);
+            scratchCanvas.addEventListener('mouseleave', handlePointerUp);
+
+            scratchCanvas.addEventListener('touchstart', handlePointerDown, { passive: false });
+            scratchCanvas.addEventListener('touchmove', handlePointerMove, { passive: false });
+            scratchCanvas.addEventListener('touchend', handlePointerUp);
+        }
+
+        function getPointerPos(e) {
+            const rect = scratchCanvas.getBoundingClientRect();
+            let clientX, clientY;
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
+        }
+
+        function handlePointerDown(e) {
+            if (canvasCleared) return;
+            e.preventDefault();
+            isDrawing = true;
+            const pos = getPointerPos(e);
+            scratchCtx.beginPath();
+            scratchCtx.moveTo(pos.x, pos.y);
+        }
+
+        function handlePointerMove(e) {
+            if (!isDrawing || canvasCleared) return;
+            e.preventDefault();
+            const pos = getPointerPos(e);
+            scratchCtx.lineTo(pos.x, pos.y);
+            scratchCtx.stroke();
+            checkEraserProgress();
+        }
+
+        function handlePointerUp() {
+            isDrawing = false;
+        }
+
+        function checkEraserProgress() {
+            if (Math.random() > 0.2) return; // Optimización
+
+            const imageData = scratchCtx.getImageData(0, 0, scratchCanvas.width, scratchCanvas.height);
+            const pixels = imageData.data;
+            let transparentPixels = 0;
+            const totalPixels = pixels.length / 4;
+
+            for (let i = 3; i < pixels.length; i += 4) {
+                if (pixels[i] < 128) transparentPixels++;
+            }
+
+            const percent = (transparentPixels / totalPixels) * 100;
+            if (percent > 45) { // Si borró más del 45%, revelamos
+                canvasCleared = true;
+                scratchCanvas.style.opacity = '0';
+
+                // Cerrar automáticamente a los 3.5s
+                setTimeout(() => {
+                    closeMessage();
+                }, 3500);
+            }
+        }
+
+        // --- Variables y Lógica de la Semillita ---
+        let isRaining = false;
+        let isPlanted = false;
+
+        function showSeedMinigame() {
+            document.getElementById('btn-show-seed').style.display = 'none';
+            document.getElementById('seed-container').style.display = 'flex';
+
+            // Reiniciar estado
+            isRaining = false;
+            isPlanted = false;
+            document.getElementById('seed-cloud').classList.remove('raining');
+            document.getElementById('magic-flower').classList.remove('grown');
+            document.getElementById('seed-hint').style.opacity = '1';
+            document.getElementById('seed-success-text').style.opacity = '0';
+        }
+
+        function waterSeed() {
+            if (isRaining || isPlanted) return;
+            isRaining = true;
+
+            const cloud = document.getElementById('seed-cloud');
+            const hint = document.getElementById('seed-hint');
+            const flower = document.getElementById('magic-flower');
+            const successText = document.getElementById('seed-success-text');
+
+            cloud.classList.add('raining');
+            hint.style.opacity = '0'; // Desvanecer texto pista
+
+            // Después de 2s de lluvia, detenerla y hacer crecer la flor
+            setTimeout(() => {
+                cloud.classList.remove('raining');
+                isPlanted = true;
+
+                // Crece la flor (Girasol)
+                flower.classList.add('grown');
+
+                // Magia de estrellas al crecer
+                setTimeout(() => { fireStars(); }, 500);
+
+                // Mostrar texto de éxito
+                setTimeout(() => {
+                    successText.style.opacity = '1';
+
+                    // Cerrar botella
+                    setTimeout(() => {
+                        closeMessage();
+                    }, 4500);
+                }, 1500); // Esperar a que crezca un poco para mostrar texto
+            }, 2000);
+        }
+
+        function fireStars() {
+            const duration = 2000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#fef08a', '#fbbf24', '#f59e0b'],
+                    shapes: ['star']
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#fef08a', '#fbbf24', '#f59e0b'],
+                    shapes: ['star']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+
+        // --- Variables y Lógica de la Bucket List ---
+        let promisesChecked = 0;
+
+        function initChecklist() {
+            document.getElementById('checklist-container').style.display = 'flex';
+            promisesChecked = 0;
+            document.getElementById('approval-stamp').classList.remove('stamped');
+            for (let i = 0; i < 4; i++) {
+                document.getElementById('promise-' + i).classList.remove('checked');
+            }
+        }
+
+        function togglePromise(id) {
+            const item = document.getElementById('promise-' + id);
+            if (!item.classList.contains('checked')) {
+                item.classList.add('checked');
+                promisesChecked++;
+
+                if (promisesChecked === 4) {
+                    // Sello de Aprobación
+                    setTimeout(() => {
+                        document.getElementById('approval-stamp').classList.add('stamped');
+                    }, 400);
+
+                    // Cierre automático
+                    setTimeout(() => {
+                        closeMessage();
+                    }, 3500);
+                }
+            }
+        }
+
+        let typingTimeout;
+        let isTyping = false;
+
+        function typeWritePoem(paragraphs, container) {
+            isTyping = true;
+            container.innerHTML = "";
+            container.style.minHeight = "200px"; // Tamaño fijo para evitar cambios
+            container.style.display = "flex";
+            container.style.flexDirection = "column";
+            container.style.justifyContent = "center";
+
+            let pIndex = 0;
+
+            function typeParagraph() {
+                if (pIndex >= paragraphs.length) {
+                    isTyping = false;
+                    if (messages[currentMessageIndex].callback) {
+                        messages[currentMessageIndex].callback();
+                    }
+                    return;
+                }
+
+                // Limpiar el contenedor antes del nuevo párrafo
+                container.innerHTML = "";
+
+                const p = document.createElement('p');
+                if (pIndex === 0) {
+                    p.style.fontFamily = "'Playfair Display', serif";
+                    p.style.color = '#78350f';
+                    p.style.fontSize = '1.3rem';
+                    p.style.textAlign = 'center';
+                    p.style.marginBottom = '25px';
+                } else if (pIndex === paragraphs.length - 1) {
+                    p.style.fontStyle = 'italic';
+                    p.style.textAlign = 'center';
+                    p.style.fontWeight = 'bold';
+                    p.style.color = '#b45309';
+                } else {
+                    p.style.fontStyle = 'italic';
+                    p.style.color = '#451a03';
+                    p.style.textAlign = 'center';
+                }
+                container.appendChild(p);
+
+                const text = paragraphs[pIndex];
+                let charIndex = 0;
+
+                function typeChar() {
+                    if (!isTyping) return;
+                    if (charIndex < text.length) {
+                        p.innerHTML += text.charAt(charIndex);
+                        charIndex++;
+                        typingTimeout = setTimeout(typeChar, 60); // Mucho más lento (60ms por letra)
+                    } else {
+                        // Tiempo de lectura dinámico más ágil
+                        const readTime = Math.max(1200, text.length * 35);
+
+                        pIndex++;
+                        typingTimeout = setTimeout(() => {
+                            // Desvanece el párrafo actual
+                            p.style.transition = "opacity 0.5s ease";
+                            p.style.opacity = "0";
+                            // Esperar a que se desvanezca para empezar el siguiente
+                            typingTimeout = setTimeout(typeParagraph, 500);
+                        }, readTime);
+                    }
+                }
+                typeChar();
+            }
+
+            typingTimeout = setTimeout(typeParagraph, 500);
+        }
+
         function openMessage(index) {
             startMusic();
 
             currentMessageIndex = index;
             const modal = document.getElementById('message-modal');
             const parchment = document.getElementById('parchment');
+            const closeBtn = document.getElementById('modal-close-btn');
 
             document.getElementById('msg-title').innerText = messages[index].title;
-            document.getElementById('msg-content').innerHTML = messages[index].content;
+
+            if (messages[index].typewriter) {
+                document.getElementById('msg-content').innerHTML = ""; // Se llenará en la animación
+            } else {
+                document.getElementById('msg-content').innerHTML = messages[index].content;
+                document.getElementById('msg-content').style.minHeight = "auto";
+                document.getElementById('msg-content').style.display = "block";
+            }
+
+            // Ocultar botón X en todas las botellas interactivas y en el cofre final (del 0 al 4)
+            if (index >= 0 && index <= 4) {
+                closeBtn.style.display = 'none';
+            } else {
+                closeBtn.style.display = 'flex';
+            }
+
+            // Asegurar que contenedores de minijuegos no se vean por error
+            document.getElementById('cake-container').style.display = 'none';
+            document.getElementById('eraser-container').style.display = 'none';
+            document.getElementById('seed-container').style.display = 'none';
+            document.getElementById('checklist-container').style.display = 'none';
+
+            // Inicializar minijuego específico si es necesario al abrir (sin botón extra)
+            if (index === 3) {
+                initChecklist();
+            }
 
             modal.style.display = 'flex';
 
@@ -723,7 +1896,9 @@
                 modal.style.opacity = '1';
                 parchment.classList.add('open');
 
-                if (messages[index].callback) {
+                if (messages[index].typewriter) {
+                    typeWritePoem(messages[index].paragraphs, document.getElementById('msg-content'));
+                } else if (messages[index].callback) {
                     setTimeout(() => messages[index].callback(), 500);
                 }
             }, 10);
@@ -740,6 +1915,9 @@
         }
 
         function closeMessage() {
+            clearTimeout(typingTimeout);
+            isTyping = false;
+
             const modal = document.getElementById('message-modal');
             const parchment = document.getElementById('parchment');
 
@@ -763,31 +1941,84 @@
                     }
                 }
 
-                // Control de progreso (las 4 primeras botellas leídas)
-                if (openedBottles.size === 4 && !finalEmerged) {
-                    emergeFinalBottle();
-                }
-
-                // Dibujar constelación al cerrar la ÚLTIMA botella (índice 4)
-                if (currentMessageIndex === 4) {
-                    drawConstellation();
+                // Iniciar el rompecabezas de estrellas al terminar la botella 4
+                if (openedBottles.size === 4 && !finalEmerged && currentStar === 0) {
+                    // Asegurar que todas las botellas anteriores desaparezcan
+                    document.querySelectorAll('.bottle-wrapper:not(.special)').forEach(b => b.style.display = 'none');
+                    startStarPuzzle();
                 }
 
                 currentMessageIndex = -1;
-            }, 500);
+            }, 400);
         }
 
-        function emergeFinalBottle() {
+        function startStarPuzzle() {
+            const constel = document.getElementById('constellation');
+            const hint = document.getElementById('constellation-hint');
+
+            constel.style.display = 'block';
+            setTimeout(() => {
+                constel.classList.add('visible');
+                hint.classList.add('show'); // Mostrar el texto guía en el cielo
+
+                // Habilitar la primera estrella
+                document.getElementById('star-0').classList.add('active');
+            }, 100);
+        }
+
+        function clickStar(index) {
+            if (index !== currentStar) return; // Forzar el orden
+
+            // Desvanecer el texto guía si es la primera estrella
+            if (index === 0) {
+                document.getElementById('constellation-hint').classList.remove('show');
+            }
+
+            const star = document.getElementById('star-' + index);
+            star.classList.remove('active');
+            star.classList.add('completed');
+
+            if (index > 0) {
+                // Dibujar línea desde la estrella anterior a esta
+                const line = document.getElementById('line-' + index);
+                if (line) {
+                    line.style.strokeDashoffset = '0';
+                }
+            }
+
+            currentStar++;
+
+            if (currentStar < 5) {
+                document.getElementById('star-' + currentStar).classList.add('active');
+            } else {
+                // Puzzle terminado!
+                setTimeout(() => {
+                    triggerShootingStar();
+                }, 500);
+            }
+        }
+
+        function triggerShootingStar() {
+            const shootingStar = document.getElementById('shooting-star');
+            shootingStar.classList.add('falling');
+
+            // El cofre dorado emerge cuando cae la estrella
+            setTimeout(() => {
+                emergeFinalChest();
+            }, 1000);
+        }
+
+        function emergeFinalChest() {
             finalEmerged = true;
 
-            const specialBottle = document.getElementById('b4');
-            specialBottle.classList.add('emerged');
+            const specialChest = document.getElementById('b4');
+            specialChest.classList.add('emerged');
 
-            // Hacer que flote hacia arriba
+            // Hacer que flote hacia arriba (animación controlada por clase emerged)
             setTimeout(() => {
-                specialBottle.style.bottom = "20%";
+                specialChest.style.bottom = "20%";
                 setTimeout(() => {
-                    specialBottle.style.animation = "float 4s infinite ease-in-out";
+                    specialChest.style.animation = "float 4s infinite ease-in-out";
                 }, 3000);
             }, 100);
         }
@@ -825,6 +2056,56 @@
             setTimeout(() => {
                 modal.style.display = 'none';
             }, 400);
+        }
+
+
+        function finishExperience() {
+            fireHearts();
+
+            // Esperar 4 segundos para que aprecie el final del poema y los corazones
+            setTimeout(() => {
+                closeMessage();
+
+                // Desvanecer el mar (opcional, ayuda a despejar la pantalla para el cielo)
+                const sea = document.querySelector('.ocean');
+                if (sea) {
+                    sea.style.transition = "opacity 3s ease";
+                    sea.style.opacity = "0";
+                }
+
+                // Desvanecer constelación y pista
+                const constel = document.getElementById('constellation');
+                if (constel) {
+                    constel.style.transition = "opacity 3s ease";
+                    constel.style.opacity = "0";
+                }
+                const hint = document.getElementById('constellation-hint');
+                if (hint) {
+                    hint.style.transition = "opacity 3s ease";
+                    hint.style.opacity = "0";
+                }
+
+                // Iniciar los créditos
+                setTimeout(() => {
+                    const credits = document.getElementById('credits-screen');
+                    const creditsContent = document.getElementById('credits-content');
+                    credits.style.display = 'flex';
+
+                    // Pequeña pausa para que display flex se aplique antes del fade in
+                    setTimeout(() => {
+                        credits.style.opacity = '1';
+                        creditsContent.classList.add('crawling');
+                    }, 100);
+
+                    // Mostrar pista de la luna casi al acabar los créditos (42s)
+                    setTimeout(() => {
+                        const moonHint = document.getElementById('final-moon-hint');
+                        if (moonHint) {
+                            moonHint.style.opacity = '1';
+                        }
+                    }, 42000);
+                }, 1000);
+            }, 4000);
         }
 
         // --- Efectos Visuales (Confeti) ---
